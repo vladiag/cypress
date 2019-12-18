@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h2>Cypress</h2>
+        </section>
+        <section>
+            <h3>Пирамида тестирования</h3>
+            <div style="display: flex;">
+                <div style="flex: 3" class="image">
+                    <img style="background: none; border: none; box-shadow: none;" src="./piramida.svg">
+                </div>
+                <div style="flex: 2; font-size: 28px;" class="text">
+                    <ul>
+                        <li class="fragment">Юнит тесты - тесты на компоненты через PageObject, тесты на сервисы,
+                            функции, хелперы и т.д.;
+                        </li>
+                        <li class="fragment">Интеграционные тесты - тесты на ваше приложение в prod-like режиме без
+                            бэкенда;
+                        </li>
+                        <li class="fragment">E2E тесты - тесты на ваше приложение в prod режиме, где проверяется работа
+                            с реальным бэком.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+        <section>
+            <section><h3>Почему Cypress?</h3></section>
+            <section data-background-image="./cypress_github.png" data-background-position="top">
+                <p style="background: #000;padding: 20px;max-width: 400px;float: right;border: 2px solid #7d7d7d;box-shadow: 0 0 15px 0px #ccc;">
+                    Коммьюнити
+                </p>
+            </section>
+            <section
+                    data-background-iframe="https://docs.cypress.io/guides/getting-started/writing-your-first-test.html"
+                    data-background-interactive>
+                <p style="background: #000;padding: 20px;max-width: 400px;float: right;border: 2px solid #7d7d7d;box-shadow: 0 0 15px 0px #ccc;">
+                    Дока 2
+                </p>
+            </section>
+            <section data-background-video="https://docs.cypress.io/img/snippets/debugging.9129407a.mp4">
+                <p style="background: #000;padding: 20px;max-width: 400px;float: right;border: 2px solid #7d7d7d;box-shadow: 0 0 15px 0px #ccc;">
+                    Debugging
+                </p>
+            </section>
+            <section data-background-iframe="https://docs.cypress.io/guides/tooling/typescript-support.html"
+                     data-background-interactive>
+                <p style="background: #000;padding: 20px;max-width: 400px;float: right;border: 2px solid #7d7d7d;box-shadow: 0 0 15px 0px #ccc;">
+                    Typescript
+                </p>
+            </section>
+        </section>
+        <!--        <section>-->
+        <!--            <h3>NX</h3>-->
+        <!--            <p>Инструмент для организации кода в вашей монорепе</p>-->
+        <!--            <ul>-->
+        <!--                <li>Разделение кода на либы/проекты</li>-->
+        <!--                <li>Вычисление дифа</li>-->
+        <!--                <li>Встроенная работа с Cypress</li>-->
+        <!--            </ul>-->
+        <!--        </section>-->
+        <section>
+            <section>
+                <h3>Как начать писать тесты?</h3>
+            </section>
+            <section>
+                Prod-like сборка приложения
+                <pre>
+	<code class="hljs json" data-trim>
+"build": {
+ ...
+ "cypress": {
+  ...
+  "aot": true,
+  "fileReplacements": [
+   {
+    "replace": "PATH_TO_PROJECT/environment.ts",
+    "with": "PATH_TO_PROJECT/environment.prod.ts"
+   }
+  ]
+ }
+}
+
+	</code>
+</pre>
+            </section>
+
+            <section>
+                Подключаем сборку для serve таски
+                <pre>
+<code class="hljs json" data-trim>
+"serve": {
+ ...
+ "configurations": {
+  ...
+  "cypress": {
+   "browserTarget": "main-app:build:cypress"
+  }
+ }
+}
+
+	</code>
+</pre>
+            </section>
+            <section>
+                Устанавливаем зависимости
+                <pre>
+<code class="hljs" data-trim>
+    npm i concurrently cypress wait-on --save-dev
+</code>
+</pre>
+            </section>
+            <section>
+                Подготавливаем скрипты для запуска
+                <pre>
+<code class="hljs json" data-trim>
+"serve:cypress": "ng serve -c cypress",
+"cypress:open": "wait-on http-get://YOUR_APP_URL/main.js && cypress open",
+"cypress:run": "wait-on http-get://YOUR_APP_URL/main.js && cypress run",
+"test:integrations": "concurrently -k --success first \"npm run serve:cypress\" \"npm run cypress:run\""
+</code>
+</pre>
+            </section>
+        </section>
+
+        <section>
+            <h3>Локальная разработка</h3>
+            <p>Запускаем сборку</p>
+            <pre>
+<code class="hljs json" data-trim>
+npm run serve:cypress
+</code>
+</pre>
+            <p>Запускаем cypress</p>
+            <pre>
+<code class="hljs json" data-trim>
+npm run cypress:open
+</code>
+</pre>
+        </section>
+
+        <section>
+            <h3>Идем писать тест</h3>
+            <img src="./cat.gif" alt="">
+        </section>
+
+        <section>
+            <h3>Основные принципы написания интеграционных тестов</h3>
+            <p class="fragment">Принцип "Один тест - один assert" не работает</p>
+            <p class="fragment">Мокируем задник (cy.route ваш бро навсегда)</p>
+        </section>
+
+        <section>
+            <h3>Это все?</h3>
+            <h3 class="fragment">Нет</h3>
+        </section>
+
+        <section>
+            <h3>Visual regressing</h3>
+            <p class="fragment">Используешь Cypress - делай скриншот тестирование</p>
+            <p class="fragment">Cypress Image Snapshot</p>
+        </section>
+
+        <section>
+
+            <section>
+                Устанавливаем зависимости
+                <pre>
+     <code>
+npm install --save-dev cypress-image-snapshot
+     </code>
+            </pre>
+            </section>
+            <section>
+                Добавляем поддержку плагина - plugins/index.js
+                <pre>
+     <code>
+const {
+  addMatchImageSnapshotPlugin,
+} = require('cypress-image-snapshot/plugin');
+
+module.exports = (on, config) => {
+  addMatchImageSnapshotPlugin(on, config);
+};
+     </code>
+                    </pre>
+            </section>
+            <section>
+                Добавляем поддержку новой команды в тестах - support/commands.js
+                <pre>
+     <code>
+import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command';
+
+addMatchImageSnapshotCommand();
+     </code>
+</pre>
+            </section>
+
+            <section>
+                Используем в тесте
+                <pre>
+     <code>
+it('...', () => {
+    cy.get('...').click();
+    cy.matchImageSnapshot('clicked button');
+})
+     </code>
+</pre>
+            </section>
+        </section>
+
+        <section>
+            <h3>Шрифты</h3>
+            <img src="./no-docker.png" alt="">
+        </section>
+
+        <section>
+            <h3><s>Решение</s></h3>
+            <p class="fragment">Повышаем попиксельный diff до 20% ...</p>
+            <p class="fragment">... и общий diff до 0.05%</p>
+            <p class="fragment">Следствие - изменение текстовки дает успешный билд</p>
+        </section>
+
+        <section>
+            <h3>Решение</h3>
+            <p class="fragment">Оборачиваем выполнение тестов в docker</p>
+        </section>
+
+        <section>
+            <section>
+                Подготавливаем DockerFile - integrations.Dockerfile
+                <pre>
+     <code>
+FROM cypress/base:10
+
+WORKDIR /app
+
+COPY / /app/
+
+RUN npm ci
+     </code>
+</pre>
+            </section>
+
+            <section>
+                Подготавливаем скрипты
+                <pre>
+     <code>
+"docker:build": "docker build -t integrations -f integrations.Dockerfile .",
+"docker:run:app": "docker run --rm -v $(pwd)/cypress:/app/cypress integrations:latest",
+"test:integrations": "concurrently -k --success first \"npm run serve:cypress\" \"npm run cypress:run\"",
+"test:integrations:ci": "npm run docker:build && npm run docker:run:app npm run test:integrations",
+     </code>
+</pre>
+            </section>
+
+            <section>
+                Запускаем команду
+                <pre>
+     <code>
+npm run test:integrations:ci
+     </code>
+</pre>
+            </section>
+
+            <section>
+                Итог - понизили все diff до 0
+            </section>
+
+        </section>
+
+        <section>
+            <h3>Снова шрифты</h3>
+            <img src="./no-fonts.png" alt="">
+        </section>
+
+        <section>
+            <h3>Решение</h3>
+            <p>Для приложения предзагружаем шрифты</p>
+            <pre>
+<code>
+<link rel="preload" href="https://business.cdn-tinkoff.ru/static/fonts/tinkoff-ui-fonts.css" as="style">
+</code>
+</pre>
+        </section>
+
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
