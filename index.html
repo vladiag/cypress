@@ -27,6 +27,16 @@
     <div class="slides">
         <section>
             <h2>Cypress</h2>
+            <p>Опыт написания интеграционных тестов</p>
+        </section>
+        <section>
+            <h3>Отступление</h3>
+            <p class="fragment">Зачем нужны тесты?</p>
+            <ul>
+                <li class="fragment">Проверка нового кода</li>
+                <li class="fragment">Изменения не сломали старый код</li>
+                <li class="fragment">Документация</li>
+            </ul>
         </section>
         <section>
             <h3>Пирамида тестирования</h3>
@@ -48,14 +58,12 @@
                     </ul>
                 </div>
             </div>
-
         </section>
         <section>
             <section><h3>Почему Cypress?</h3></section>
-            <section data-background-image="./cypress_github.png" data-background-position="top">
-                <p style="background: #000;padding: 20px;max-width: 400px;float: right;border: 2px solid #7d7d7d;box-shadow: 0 0 15px 0px #ccc;">
-                    Коммьюнити
-                </p>
+            <section>
+                <p>Коммьюнити</p>
+                <img src="./cypress_stars.jpg" alt="">
             </section>
             <section
                     data-background-iframe="https://docs.cypress.io/guides/getting-started/writing-your-first-test.html"
@@ -76,15 +84,6 @@
                 </p>
             </section>
         </section>
-        <!--        <section>-->
-        <!--            <h3>NX</h3>-->
-        <!--            <p>Инструмент для организации кода в вашей монорепе</p>-->
-        <!--            <ul>-->
-        <!--                <li>Разделение кода на либы/проекты</li>-->
-        <!--                <li>Вычисление дифа</li>-->
-        <!--                <li>Встроенная работа с Cypress</li>-->
-        <!--            </ul>-->
-        <!--        </section>-->
         <section>
             <section>
                 <h3>Как начать писать тесты?</h3>
@@ -106,7 +105,6 @@
   ]
  }
 }
-
 	</code>
 </pre>
             </section>
@@ -172,8 +170,8 @@ npm run cypress:open
 
         <section>
             <h3>Основные принципы написания интеграционных тестов</h3>
-            <p class="fragment">Принцип "Один тест - один assert" не работает</p>
             <p class="fragment">Мокируем задник (cy.route ваш бро навсегда)</p>
+            <p class="fragment">Принцип "Один тест - один assert" не работает</p>
         </section>
 
         <section>
@@ -183,7 +181,7 @@ npm run cypress:open
 
         <section>
             <h3>Visual regressing</h3>
-            <p class="fragment">Используешь Cypress - делай скриншот тестирование</p>
+            <p class="fragment">Используешь Cypress - дeлай скриншот тестирование</p>
             <p class="fragment">Cypress Image Snapshot</p>
         </section>
 
@@ -241,10 +239,12 @@ it('...', () => {
         </section>
 
         <section>
-            <h3><s>Решение</s></h3>
+            <h3 custom-id="reshenie">Решение</h3>
             <p class="fragment">Повышаем попиксельный diff до 20% ...</p>
             <p class="fragment">... и общий diff до 0.05%</p>
-            <p class="fragment">Следствие - изменение текстовки дает успешный билд</p>
+            <p class="fragment" onclick="document.querySelector('[custom-id=reshenie]').style.textDecoration='line-through'">
+                Следствие - изменение текстовки дает успешный билд
+            </p>
         </section>
 
         <section>
@@ -290,22 +290,36 @@ npm run test:integrations:ci
             </section>
 
             <section>
-                Итог - понизили все diff до 0
+                Итог - понизили diff до 0
             </section>
 
         </section>
 
         <section>
             <h3>Снова шрифты</h3>
-            <img src="./no-fonts.png" alt="">
+            <div style="position:relative;">
+                <img src="./no-fonts.png" alt="">
+                <div class="fragment" style="position: absolute; left: 48%; width: 46%; height: 8%; border: 2px solid red; top: 25%; transform: translateX(-50%);">
+                    <span style="color: red; font-size: 0.75em">Место для вашей рекламы</span>
+                </div>
+            </div>
         </section>
 
         <section>
             <h3>Решение</h3>
-            <p>Для приложения предзагружаем шрифты</p>
+            <p>Заменяем удаленную загрузку шрифтов на локальные шрифты</p>
             <pre>
 <code>
-<link rel="preload" href="https://business.cdn-tinkoff.ru/static/fonts/tinkoff-ui-fonts.css" as="style">
+"build": {
+ ...
+ "cypress": {
+  ...
+  "styles": [
+    "cypress/fixtures/tui-fonts.less",
+    "src/styles.less"
+  ],
+ }
+}
 </code>
 </pre>
         </section>
@@ -319,6 +333,8 @@ npm run test:integrations:ci
     // More info about config & dependencies:
     // - https://github.com/hakimel/reveal.js#configuration
     // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.configure({ slideNumber: true });
+
     Reveal.initialize({
         dependencies: [
             {src: 'plugin/markdown/marked.js'},
