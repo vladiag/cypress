@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Cypress</title>
 
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/reveal.css">
@@ -63,7 +63,7 @@
             <section><h3>Почему Cypress?</h3></section>
             <section>
                 <p>Коммьюнити</p>
-                <img src="./cypress_stars.jpg" alt="">
+                <img src="./cypress_stars.png" alt="">
             </section>
             <section
                     data-background-iframe="https://docs.cypress.io/guides/getting-started/writing-your-first-test.html"
@@ -322,6 +322,48 @@ npm run test:integrations:ci
 }
 </code>
 </pre>
+        </section>
+
+        <section>
+            <h3>Мелкопроблемы</h3>
+            <section>
+                <p>Даты</p>
+                <pre>
+<code>
+const now = new Date(2025, 11, 22, 0).getTime();
+
+cy.clock(now, ['Date']);
+</code>
+</pre>
+            </section>
+            <section>
+                <p>Скриншоты при локальной разработке</p>
+                <pre>
+<code>
+Cypress.Commands.overwrite(
+    'matchImageSnapshot',
+    (originalFn, subject, fileName, options) => {
+        if (Сypress.env('ci')) {
+            cy.wait(250);
+
+            return originalFn(subject, fileName, options);
+        }
+
+        return subject;
+    },
+);
+</code>
+</pre>
+            </section>
+
+        </section>
+
+        <section>
+            <h3>Вопросы</h3>
+            <p>
+                - <a href="https://github.com/vladiag/cypress">Ссылка на презентацию</a> <br>
+                - <a href="https://github.com/vladiag/cypress-example">Ссылка на пример</a>
+            </p>
         </section>
 
     </div>
